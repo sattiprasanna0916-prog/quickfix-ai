@@ -11,7 +11,13 @@ function History() {
 
   const fetchHistory = async () => {
     try {
-      const response = await API.get("/history");
+      const token = localStorage.getItem("token");
+
+const response = await API.get("/history", {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
       setHistory(response.data);
     } catch (error) {
       alert("Failed to fetch history");

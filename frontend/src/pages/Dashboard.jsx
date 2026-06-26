@@ -5,13 +5,25 @@ import { Link } from "react-router-dom";
 function Dashboard() {
   const [userInput, setUserInput] = useState("");
   const [result, setResult] = useState(null);
-
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/";
+};
   const handleAnalyze = async () => {
     try {
-      const response = await API.post("/analyze", {
-        user_input: userInput
-      });
-
+      const token = localStorage.getItem("token");
+  
+const response = await API.post(
+  "/analyze",
+  {
+    user_input: userInput
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+);
       setResult(response.data);
     } catch (error) {
       alert("Analysis failed");
@@ -35,7 +47,12 @@ function Dashboard() {
       >
         Analyze
       </button>
-
+      <button
+  onClick={handleLogout}
+  className="mt-4 bg-red-600 px-4 py-2 rounded"
+>
+  Logout
+</button>
       <Link to="/history" className="block mt-6 text-blue-400">
         View History
       </Link>
