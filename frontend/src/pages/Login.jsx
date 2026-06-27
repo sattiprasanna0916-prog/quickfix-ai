@@ -1,56 +1,52 @@
 import { useState } from "react";
 import API from "../services/api";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  });
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const response = await API.post("/login", form);
+      const response = await API.post("/login", {
+        email,
+        password
+      });
 
       localStorage.setItem("token", response.data.access_token);
-
-      alert("Login successful");
       navigate("/dashboard");
-    } catch (error) {
+    } catch {
       alert("Login failed");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
-      <h1 className="text-3xl mb-6">Login</h1>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1>QuickFix AI</h1>
+        <h2>Login</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="p-2 mb-4 text-black"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
+        <input
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="p-2 mb-4 text-black"
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-      />
+        <input
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button
-        onClick={handleLogin}
-        className="bg-green-600 px-4 py-2 rounded"
-      >
-        Login
-      </button>
+        <button onClick={handleLogin}>Login</button>
 
-      <Link to="/signup" className="mt-4 text-blue-400">
-        Don't have account? Signup
-      </Link>
+        <p>
+          Don't have an account? <Link to="/signup">Signup</Link>
+        </p>
+      </div>
     </div>
   );
 }

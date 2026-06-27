@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-
+from datetime import datetime
 
 # User Signup
 class UserSignup(BaseModel):
@@ -44,3 +44,14 @@ class SaveSession(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+class TaskCreate(BaseModel):
+    title: str
+    deadline: datetime
+
+
+class TaskResponse(BaseModel):
+    id: int
+    title: str
+    deadline: datetime
+    priority: str
+    status: str

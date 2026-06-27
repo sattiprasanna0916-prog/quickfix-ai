@@ -4,7 +4,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Priority from "./pages/Priority";
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +29,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/priority" element={<Priority />} />
       </Routes>
     </BrowserRouter>
   );

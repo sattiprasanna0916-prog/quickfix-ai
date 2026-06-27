@@ -1,44 +1,49 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 
 function History() {
   const [history, setHistory] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
+    const fetchHistory = async () => {
+      const res = await API.get("/history", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setHistory(res.data);
+    };
+
     fetchHistory();
   }, []);
 
-  const fetchHistory = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-const response = await API.get("/history", {
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
-      setHistory(response.data);
-    } catch (error) {
-      alert("Failed to fetch history");
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-10">
-      <h1 className="text-4xl mb-6">History</h1>
+    <div className="history-page">
+      <div className="topbar">
+        <h1>History</h1>
 
-      <Link to="/dashboard" className="text-blue-400">
-        Back to Dashboard
-      </Link>
+        <Link to="/dashboard" className="back-btn">
+          <FaArrowLeft /> Back to Dashboard
+        </Link>
+      </div>
 
-      <div className="mt-6 space-y-4">
-        {history.map((item) => (
-          <div key={item.id} className="bg-gray-800 p-4 rounded">
-            <p><strong>Input:</strong> {item.input_text}</p>
-            <p><strong>Result:</strong> {item.result}</p>
+      <div className="history-grid">
+        {history.length > 0 ? (
+          history.map((item) => (
+            <div key={item.id} className="card">
+              <h3>{item.input_text}</h3>
+              <p>{item.result}</p>
+            </div>
+          ))
+        ) : (
+          <div className="card">
+            <p>No history found.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
