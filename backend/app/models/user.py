@@ -3,7 +3,7 @@ from app.db import Base
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "quickfix_users"
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False)
